@@ -1,2 +1,2 @@
-# handwritten-number-identification-using-ANN
-Using a Artificial Neural Network to identify hand written numbers
+# NodeJS implementation of an ANN
+
