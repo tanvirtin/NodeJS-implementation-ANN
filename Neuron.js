@@ -11,6 +11,7 @@ class Neuron {
 		this.weights = []; // array of weights
 		this.deltaWeights = []; // array of weight value changes	
 		this.assignWeights(numNeuronsNL);
+		this.output = 0; // this is the activated output value that a neuron holds
 	}
 
 	assignWeights(size) {

@@ -13,7 +13,6 @@ class NeuralNetwork {
 	constructor(architecture) {
 		this.layers = [];
 		this.generateLayers(architecture);
-
 	}
 
 	generateLayers(aList) {
@@ -42,32 +41,73 @@ class NeuralNetwork {
 					layer.push(new Neuron(0));
 				
 				}	
-
 			}
-			
 			this.layers.push(layer);
 		}
 	}
 
 	displayLayers() {
-
 		for (var i = 0; i < this.layers.length; ++i) {
-
 			console.log("Layer " + (i + 1));
-			
 			for (var j = 0; j < this.layers[i].length; ++j) {
 				// displayWeights() already console.logs, so no need to do console.log(this.layers[i][j].displayWeights()) thats dumb...
 				this.layers[i][j].displayWeights(); // displays weight for each neuron in a layer
 			
 			}
-
 			console.log("");
+		}
+	}
+
+	// feeds forward the inputs through the layer
+	// must take a list of inputs which equals the first layer
+	feedForward(inputList) {
+		// one of the expression must be true in order for the entire expression to be
+		// evaluated to true, either the inputList variable is not an array or
+		// the inputLayer list does not have the same size/number of elements as the
+		// as the array provided through the parameter of the function
+		if (inputList.constructor !== Array || inputList.length != this.layers[0].length) {
+			console.log("Input layer architecture error!");
+			return;
+		}
+
+
+		// inputList contains a value or a bunch of values in each index of the list
+		// these value(s) are the values of the first layer neurons, which are our input neurons
+
+		for (var i = 0; i < inputList.length; ++i) {
+			this.layers[0][i].output = inputList[i];
+		}
+
+		// the value from the input layer needs to be feed forwarded to the rest of the layers
+
+		for (var i = 0; i < this.layers.length; ++i) {
+
+
+			// goes through each layer and does the magic
+
+			for (var j = 0; j < this.layers[i].length; ++j) {
+				// we are now inside the array containing neurons in a particular layer
+
+				// this.layer[i][j] // this is an individual neuron in a particular layer
+								// each neuron has 3 attributes, weights, deltaWeights and output
+
+				var o = this.layer[i][j].output * 
+
+
+			}
+
 
 
 		}
 
 
 
+	}
+
+	// activation function - sigmoid
+
+	sigmoid(x) {
+		return 1 / (1 + Math.exp(-x));
 	}
 
 }
