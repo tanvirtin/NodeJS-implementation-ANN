@@ -1,14 +1,22 @@
 'use strict';
 
+/*
+	NOTE** - ouput neurons will contain no weight values and will be an empty list
+*/
+
 class Neuron {
 
 	// takes in a number of neurons next layer has
 	constructor(numNeuronsNL) {
 		this.weights = []; // array of weights
-		for (var i = 0; i < numNeuronsNL; ++i) {
+		this.deltaWeights = []; // array of weight value changes	
+		this.assignWeights(numNeuronsNL);
+	}
+
+	assignWeights(size) {
+		for (var i = 0; i < size; ++i) {
 			this.weights.push(this.randomW());
 		}
-		this.deltaWeights = []; // array of weight value changes
 	}
 
 	displayWeights() {

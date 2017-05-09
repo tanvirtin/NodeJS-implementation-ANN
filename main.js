@@ -1,12 +1,13 @@
 'use strict';
 
 var Neuron = require("./Neuron.js"); // when importing a personal module always use "./" dot slash to indicate home directory
+var NeuralNetwork = require("./NeuralNetwork.js");
 
 function main() {
 
-	var n = new Neuron(3);
+	var nn = new NeuralNetwork([1, 200, 200, 1]);
 
-	n.displayWeights();
+	nn.displayLayers();
 
 }
 
