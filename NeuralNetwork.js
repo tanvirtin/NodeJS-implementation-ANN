@@ -51,11 +51,17 @@ class NeuralNetwork {
 			console.log("Layer " + (i + 1));
 			for (var j = 0; j < this.layers[i].length; ++j) {
 				// displayWeights() already console.logs, so no need to do console.log(this.layers[i][j].displayWeights()) thats dumb...
-				this.layers[i][j].displayWeights(); // displays weight for each neuron in a layer
+				console.log(this.layers[i][j]); // displays weight for each neuron in a layer
 			
 			}
 			console.log("");
 		}
+	}
+
+
+	// displays the output layer
+	displayOutput() {
+		console.log(this.layers[this.layers.length - 1]);
 	}
 
 	// feeds forward the inputs through the layer
@@ -75,33 +81,59 @@ class NeuralNetwork {
 		// these value(s) are the values of the first layer neurons, which are our input neurons
 
 		for (var i = 0; i < inputList.length; ++i) {
+			
 			this.layers[0][i].output = inputList[i];
+
 		}
 
 		// the value from the input layer needs to be feed forwarded to the rest of the layers
 
 		for (var i = 0; i < this.layers.length; ++i) {
 
-
 			// goes through each layer and does the magic
 
 			for (var j = 0; j < this.layers[i].length; ++j) {
+
+				// add the feedForwarded values in each neuron and squash it and store it as your output
+				// checks if we are in the input layer or not, if we are then skip this thing
+				if (i !== 0) {
+					var val = 0;
+
+					for (var x = 0; x < this.layers[i][j].feedForwarded.length; ++x) {
+						val += this.layers[i][j].feedForwarded[x];
+					}
+
+					var activated = this.sigmoid(val);
+
+					this.layers[i][j].output = activated;
+				}
+
 				// we are now inside the array containing neurons in a particular layer
 
 				// this.layer[i][j] // this is an individual neuron in a particular layer
 								// each neuron has 3 attributes, weights, deltaWeights and output
 
-				var o = this.layer[i][j].output * 
+				for (var k = 0; k < this.layers[i][j].weights.length; ++k) {
+					// contains the array of weights
+					// the formula w * xi, where xi is the input value
+					// this layer		
+
+	
+					if (i + 1 !== this.layers.length) {	
+
+						for (var y = 0; y < this.layers[i + 1].length; ++y) {
+						
+							this.layers[i + 1][y].feedForwarded.push(this.layers[i][j].weights[k] * this.layers[i][j].output);
+
+						}
 
 
+					}
+
+				}
 			}
 
-
-
 		}
-
-
-
 	}
 
 	// activation function - sigmoid

@@ -9,9 +9,10 @@ class Neuron {
 	// takes in a number of neurons next layer has
 	constructor(numNeuronsNL) {
 		this.weights = []; // array of weights
-		this.deltaWeights = []; // array of weight value changes	
+		this.deltaWeights = []; // array of weight value changes
+		this.output = 0; // this is the activated output value that a neuron holds		
+		this.feedForwarded = []; // weight * xj values given from nodes in previous layer, these values get added and then squashed using activation function
 		this.assignWeights(numNeuronsNL);
-		this.output = 0; // this is the activated output value that a neuron holds
 	}
 
 	assignWeights(size) {
