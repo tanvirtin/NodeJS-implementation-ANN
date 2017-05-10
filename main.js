@@ -5,16 +5,33 @@ var NeuralNetwork = require("./NeuralNetwork.js");
 
 function main() {
 
-	var nn = new NeuralNetwork([1, 2, 2, 3]);
+	var data = trainingData();
 
-	for (var i = 0; i < 60000; ++i) {
-		nn.feedForward([22]);
-		nn.backPropagation([1, 0, 1]);
+	var nn = new NeuralNetwork([1, 2, 2, 1]);
+
+	
+
+}
+
+function trainingData() {
+
+	var data = [];
+
+	for (var i = 0; i < 10; ++i) {
+		var pair = [];
+		pair.push(i);
+
+		if (i % 2 == 0) {
+			pair.push(1);
+		} else {
+			pair.push(0);
+		}
+
+		data.push(pair);
+
 	}
 
-
-
-	nn.displayLayers();
+	return data;
 
 }
 

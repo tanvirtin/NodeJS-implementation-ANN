@@ -12,7 +12,7 @@ class NeuralNetwork {
 	// node the value inside each index of a list contains the number of neurons it posseses
 	constructor(architecture) {
 		this.layers = []; // layers of neurons
-		this.alpha = 0.001; // learning rate of the Neural Network
+		this.alpha = 0.1; // learning rate of the Neural Network
 		this.generateLayers(architecture);
 	}
 
@@ -79,11 +79,8 @@ class NeuralNetwork {
 
 		// inputList contains a value or a bunch of values in each index of the list
 		// these value(s) are the values of the first layer neurons, which are our input neurons
-
 		for (var i = 0; i < inputList.length; ++i) {
-			
 			this.layers[0][i].output = inputList[i];
-
 		}
 
 		// the value from the input layer needs to be feed forwarded to the rest of the layers
@@ -93,12 +90,12 @@ class NeuralNetwork {
 			// goes through each layer and does the magic
 
 			for (var j = 0; j < this.layers[i].length; ++j) {
-
 				// add the feedForwarded values in each neuron and squash it and store it as your output
 				// checks if we are in the input layer or not, if we are then skip this thing
 				if (i !== 0) {
 					var val = 0;
 
+					// looping over feedForwarded array
 					for (var x = 0; x < this.layers[i][j].feedForwarded.length; ++x) {
 						val += this.layers[i][j].feedForwarded[x];
 						this.layers[i][j].feedForwarded = []; // empty out the array in preparation for the next iteration
@@ -115,16 +112,10 @@ class NeuralNetwork {
 				// this.layer[i][j] // this is an individual neuron in a particular layer
 								// each neuron has 3 attributes, weights, deltaWeights and output
 
-
-				// loop over the weights in a single neuron
-				for (var k = 0; k < this.layers[i][j].weights.length; ++k) {
-					// contains the array of weights
-					// the formula w * xi, where xi is the input value
-					// this layer		
-
+				// loop over the weight array in a single neuron
+				for (var k = 0; k < this.layers[i][j].weights.length; ++k) {		
 	
 					if (i + 1 !== this.layers.length) {	
-
 						// each weight is dedicated to each neuron in the other layer
 						// so the weight * output is simply multiplied together and passed onto a neuron
 						
@@ -132,11 +123,13 @@ class NeuralNetwork {
 						// therefore variable k can be used to iterate both weights in this layer and neurons in the other layer
 						this.layers[i + 1][k].feedForwarded.push(this.layers[i][j].weights[k] * this.layers[i][j].output);
 
-
 					}
 
 				}
+
+				// neuron loop ends here
 			}
+		// layer loop ends here
 		}
 	}
 
@@ -165,7 +158,6 @@ class NeuralNetwork {
 		for (var i = 0; i < err.length; ++i) {
 			this.layers[s][i].error = err[i];
 		}
-
 
 
 		// if the array is [1, 2, 3, 4], array starts off from [4, 3, 2, 1] 
@@ -200,7 +192,7 @@ class NeuralNetwork {
 					// now we have the denominator simply multiply the weight/denominator with error
 
 					for (var k = 0; k < this.layers[i - 1].length; ++k) {
-						var e = (this.layers[i - 1][k].weights[j] / denominator) * this.layers[i][j].error;
+						var e = this.layers[i][j].error * (this.layers[i - 1][k].weights[j] / denominator);
 						this.layers[i - 1][k].error = e; // update the error to the prev layers neurons
 						var deltaW = this.dedw(e, this.layers[i - 1][k]);
 						this.layers[i - 1][k].deltaWeights.push(deltaW);
@@ -224,9 +216,8 @@ class NeuralNetwork {
 			for (var j = 0; j < this.layers[i].length; ++j) {
 				// we are dealing with neurons in this loop 
 				for (var k = 0; k < this.layers[i][j].weights.length; ++k) {
-					this.layers[i][j].weights[k] = this.layers[i][j].weights[k] - this.alpha * this.layers[i][j].deltaWeights[k]; 
+					this.layers[i][j].weights[k] += this.alpha * this.layers[i][j].deltaWeights[k]; 
 				}
-
 				this.layers[i][j].deltaWeights = [] // emptying out the delta weights for next iteration
 
 			}
@@ -235,11 +226,9 @@ class NeuralNetwork {
 
 	}
 
-
 	// neurons weights and value is important, so we take the neuron itself
 	dedw(error, neuron) {
-		//console.log(error * (1 / (1 + Math.exp(-(this.sumWO(neuron))))) * (1 - (1 / (-(this.sumWO(neuron))))) * neuron.output)
-		return error * (1 / (1 + Math.exp(-(this.sumWO(neuron))))) * (1 - (1 / (-(this.sumWO(neuron))))) * neuron.output
+		return error * this.sigmoid(this.sumWO(neuron)) * (1 - this.sigmoid(this.sumWO(neuron))) * neuron.output
 	}
 
 	// sums up all the weight * output for an individual neuron
