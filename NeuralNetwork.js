@@ -77,6 +77,8 @@ class NeuralNetwork {
 		}
 
 
+
+
 		// inputList contains a value or a bunch of values in each index of the list
 		// these value(s) are the values of the first layer neurons, which are our input neurons
 
@@ -107,6 +109,7 @@ class NeuralNetwork {
 					var activated = this.sigmoid(val);
 
 					this.layers[i][j].output = activated;
+
 				}
 
 				// we are now inside the array containing neurons in a particular layer
@@ -114,6 +117,8 @@ class NeuralNetwork {
 				// this.layer[i][j] // this is an individual neuron in a particular layer
 								// each neuron has 3 attributes, weights, deltaWeights and output
 
+
+				// loop over the weights in a single neuron
 				for (var k = 0; k < this.layers[i][j].weights.length; ++k) {
 					// contains the array of weights
 					// the formula w * xi, where xi is the input value
@@ -122,11 +127,13 @@ class NeuralNetwork {
 	
 					if (i + 1 !== this.layers.length) {	
 
-						for (var y = 0; y < this.layers[i + 1].length; ++y) {
+						// each weight is dedicated to each neuron in the other layer
+						// so the weight * output is simply multiplied together and passed onto a neuron
 						
-							this.layers[i + 1][y].feedForwarded.push(this.layers[i][j].weights[k] * this.layers[i][j].output);
+						// number of neurons in the next layer is the same as number of weights in the current layer
+						// therefore variable k can be used to iterate both weights in this layer and neurons in the other layer
+						this.layers[i + 1][k].feedForwarded.push(this.layers[i][j].weights[k] * this.layers[i][j].output);
 
-						}
 
 					}
 
@@ -136,13 +143,17 @@ class NeuralNetwork {
 	}
 
 
-
 	// this is where the real magic happens
-	backPropagation(output) {
+	backPropagation() {
 
 		// the loop has to be backwards as now we are starting from the last element
 
+		// if the array is [1, 2, 3, 4], array starts off from [4, 3, 2, 1] 
+		for (var i = this.layers.length - 2; i > -1; --i) {
 
+			// this loop traverses each layer, and each layer contains array of neurons
+
+		}	
 
 
 
