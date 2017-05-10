@@ -11,7 +11,8 @@ class NeuralNetwork {
 	// the 0th index is the input layer and the length - 1 index is the output layer
 	// node the value inside each index of a list contains the number of neurons it posseses
 	constructor(architecture) {
-		this.layers = [];
+		this.layers = []; // layers of neurons
+		this.alpha = 0.001; // learning rate of the Neural Network
 		this.generateLayers(architecture);
 	}
 
@@ -210,11 +211,30 @@ class NeuralNetwork {
 
 			}
 
-
-
 		}	
 
+		this.stochasticGD();
+
 	}
+
+	// the Neural Network is following the stochastic gradient descent algorithm
+	stochasticGD() {
+		for (var i = 0; i < this.layers.length; ++i) {
+			// we are dealing with layers in this loop
+			for (var j = 0; j < this.layers[i].length; ++j) {
+				// we are dealing with neurons in this loop 
+				for (var k = 0; k < this.layers[i][j].weights.length; ++k) {
+					this.layers[i][j].weights[k] = this.layers[i][j].weights[k] - this.alpha * this.layers[i][j].deltaWeights[k]; 
+				}
+
+				this.layers[i][j].deltaWeights = [] // emptying out the delta weights for next iteration
+
+			}
+
+		}
+
+	}
+
 
 	// neurons weights and value is important, so we take the neuron itself
 	dedw(error, neuron) {

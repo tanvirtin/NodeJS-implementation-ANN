@@ -9,10 +9,10 @@ function main() {
 
 	for (var i = 0; i < 60000; ++i) {
 		nn.feedForward([22]);
+		nn.backPropagation([1, 0, 1]);
 	}
 
 
-	nn.backPropagation([1, 0, 1]);
 
 	nn.displayLayers();
 
