@@ -76,9 +76,6 @@ class NeuralNetwork {
 			return;
 		}
 
-
-
-
 		// inputList contains a value or a bunch of values in each index of the list
 		// these value(s) are the values of the first layer neurons, which are our input neurons
 
@@ -144,18 +141,78 @@ class NeuralNetwork {
 
 
 	// this is where the real magic happens
-	backPropagation() {
+	backPropagation(target) {
+		// s is essentially the output layer's index
+		var s = this.layers.length - 1;
 
 		// the loop has to be backwards as now we are starting from the last element
+		// gives the array of neurons
+		// loop over each neuron in an array
+		// extract the output and store it in an output array
+		
+		var o = [];
+
+		for (var i = 0; i < this.layers[this.layers.length - 1].length; ++i) {
+			o.push(this.layers[this.layers.length - 1][i].output);
+		}
+
+		// now the error needs to be calculated for the output layer then back propagated
+
+		var err = this.error(target, o); // containts all the error values in an array
+
+		// loop over the neurons and assign the error
+		for (var i = 0; i < err.length; ++i) {
+			this.layers[s][i].error = err[i];
+		}
+
+
 
 		// if the array is [1, 2, 3, 4], array starts off from [4, 3, 2, 1] 
-		for (var i = this.layers.length - 2; i > -1; --i) {
+		for (var i = s; i > -1; --i) {
+
+			if (i !== s) {
+				// change the error now i think
+
+			}
 
 			// this loop traverses each layer, and each layer contains array of neurons
 
+			// each neuron in the layer contributes error, therefor each weight contributes
+			// to the error, we need to sum up the total weight for that neuron and divide the ratio
+
+			// ratio of weight is basically the neuron we are currently at's weight divided by
+			// the first weight of each individual neurons in the network
+
+			// iterate for the number of neurons in the outer layer
+			// each iteration's index will be the index of the weight array of the neurons
+			// in the previous layer
+
+								// number of neurons
+			for (var j = 0; j < this.layers[i].length; ++j) {
+
+				// jth loop delagates the error to the previous layer
+
+				// this is to make sure i - 1 is never below 0, index out of bounds error! 
+				if (i - 1 > -1) {
+
+					var denominator = 0;
+
+					// loops over the neurons in the previous layer and sums up their jth weight
+					for (var k = 0; k < this.layers[i - 1].length; ++k) {
+
+						denominator += this.layers[i - 1][k].weights[j];
+
+
+
+					}
+
+
+
+				}
+
+			}
+
 		}	
-
-
 
 	}
 
