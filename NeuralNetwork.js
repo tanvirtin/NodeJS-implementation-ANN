@@ -101,6 +101,7 @@ class NeuralNetwork {
 
 					for (var x = 0; x < this.layers[i][j].feedForwarded.length; ++x) {
 						val += this.layers[i][j].feedForwarded[x];
+						this.layers[i][j].feedForwarded = []; // empty out the array in preparation for the next iteration
 					}
 
 					var activated = this.sigmoid(val);
@@ -127,13 +128,61 @@ class NeuralNetwork {
 
 						}
 
-
 					}
 
 				}
 			}
-
 		}
+	}
+
+
+
+	// this is where the real magic happens
+	backPropagation(output) {
+
+		// the loop has to be backwards as now we are starting from the last element
+
+
+
+
+
+	}
+
+	// neurons weights and value is important, so we take the neuron itself
+	dedw(error, neuron) {
+		return error * (1 / (1 + Math.exp(-(this.sumWO(neuron))))) * (1 - (1 / (-(this.sumWO(neuron))))) * neuron.output
+	}
+
+	// sums up all the weight * output for an individual neuron
+	// sigma of Wj * Oj jth layer neuron
+	sumWO(neuron) {
+		var val = 0;
+		for (var i = 0; i < neuron.weights.length; ++i) {
+			val += neuron.weights[i] * neuron.output;
+		}
+		return val;
+	}
+
+
+	// error function for the Neural Network
+
+	// E = (t - o)^2
+	// target value is the value that the Neural Network is suppose to output,
+	// output value is the value that the Neural Network actually output
+
+	// both arguments are in array form
+	error(target, output) {
+		// either of the expression needs to be true in order for the entire expression to be true
+		if (target.constructor !== Array || output.constructor !== Array || target.length !== output.length) {
+			console.log("Wrong data format, expected array and both must be of the same length");
+			return;
+		}
+
+		var err = [];
+		for (var i = 0; i < output.length; ++i) {
+			err.push(Math.pow((target[i] - output[i]), 2));
+		}
+		return err;
 	}
 
 	// activation function - sigmoid
