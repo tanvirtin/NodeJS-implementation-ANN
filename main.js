@@ -5,14 +5,14 @@ var NeuralNetwork = require("./NeuralNetwork.js");
 
 function main() {
 
-	var nn = new NeuralNetwork([1, 2, 1]);
+	var nn = new NeuralNetwork([1, 2, 2, 3]);
 
 	for (var i = 0; i < 60000; ++i) {
 		nn.feedForward([22]);
 	}
 
 
-	nn.backPropagation([1]);
+	nn.backPropagation([1, 0, 1]);
 
 	nn.displayLayers();
 

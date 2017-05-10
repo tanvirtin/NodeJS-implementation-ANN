@@ -169,12 +169,6 @@ class NeuralNetwork {
 
 		// if the array is [1, 2, 3, 4], array starts off from [4, 3, 2, 1] 
 		for (var i = s; i > -1; --i) {
-
-			if (i !== s) {
-				// change the error now i think
-
-			}
-
 			// this loop traverses each layer, and each layer contains array of neurons
 
 			// each neuron in the layer contributes error, therefor each weight contributes
@@ -199,18 +193,24 @@ class NeuralNetwork {
 
 					// loops over the neurons in the previous layer and sums up their jth weight
 					for (var k = 0; k < this.layers[i - 1].length; ++k) {
-
 						denominator += this.layers[i - 1][k].weights[j];
-
-
-
 					}
 
+					// now we have the denominator simply multiply the weight/denominator with error
+
+					for (var k = 0; k < this.layers[i - 1].length; ++k) {
+						var e = (this.layers[i - 1][k].weights[j] / denominator) * this.layers[i][j].error;
+						this.layers[i - 1][k].error = e; // update the error to the prev layers neurons
+						var deltaW = this.dedw(e, this.layers[i - 1][k]);
+						this.layers[i - 1][k].deltaWeights.push(deltaW);
+					}
 
 
 				}
 
 			}
+
+
 
 		}	
 
@@ -218,6 +218,7 @@ class NeuralNetwork {
 
 	// neurons weights and value is important, so we take the neuron itself
 	dedw(error, neuron) {
+		//console.log(error * (1 / (1 + Math.exp(-(this.sumWO(neuron))))) * (1 - (1 / (-(this.sumWO(neuron))))) * neuron.output)
 		return error * (1 / (1 + Math.exp(-(this.sumWO(neuron))))) * (1 - (1 / (-(this.sumWO(neuron))))) * neuron.output
 	}
 
