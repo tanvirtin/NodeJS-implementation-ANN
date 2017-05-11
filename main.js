@@ -5,38 +5,35 @@ var NeuralNetwork = require("./NeuralNetwork.js");
 
 function main() {
 
-	var data = trainingData();
+	var nn = new NeuralNetwork([2, 2, 1], 0.2);
 
-	var nn = new NeuralNetwork([1, 2, 1], 0.01);
+	var epochs = 10000;
+
+	var x = [[0, 0], [0, 1], [1, 0], [1, 1]];
+    
+    var y = [[0], [1], [1], [0]];
 
 
 
+	for (var i = 0; i < epochs; ++i) {
+	
+		// when math.floor is done you can never actually hit 4, even 3.99 will be rounded off to 3	
+		var randIndex = Math.floor(Math.random() * 4);
 
-
-}
-
-function trainingData() {
-
-	var data = [];
-
-	for (var i = 0; i < 10; ++i) {
-		var pair = [];
-		pair.push(i);
-
-		if (i % 2 == 0) {
-			pair.push(1);
-		} else {
-			pair.push(0);
-		}
-
-		data.push(pair);
+		nn.feedForward(x[randIndex]);
+		nn.backPropagate(y[randIndex]);
 
 	}
 
-	return data;
+	var result = []
+	for (var i = 0; i < x.length; ++i) {
+		nn.feedForward[i];
+		result.push(nn.getOutput());
+	}
+
+	console.log(result);
 
 }
-
 
 /*
 	The expression below is equal to saying

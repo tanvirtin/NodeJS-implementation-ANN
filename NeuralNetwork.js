@@ -65,6 +65,31 @@ class NeuralNetwork {
 		console.log(this.layers[this.layers.length - 1]);
 	}
 
+	getOutput() {
+		var out = []
+		// loop through the output neurons and grab the 
+		// output value and store it in an array which gets returned
+
+		for(var i = 0; i < this.layers[this.layers.length - 1].length; ++i) {
+			out.push(this.layers[this.layers.length - 1][i].output);
+		}
+
+		return out;
+	}
+
+
+	getErrors() {
+		var err = []
+
+		for (var i = 0; i < this.layers[this.layer.length - 1].length; ++i) {
+			err.push(this.layers[this.layers.length - 1][i].error);
+		}
+
+		return err;
+	}
+
+
+
 	// feeds forward the inputs through the layer
 	// must take a list of inputs which equals the first layer
 	feedForward(inputList) {
@@ -133,7 +158,7 @@ class NeuralNetwork {
 
 
 	// this is where the real magic happens
-	backPropagation(target) {
+	backPropagate(target) {
 		// s is essentially the output layer's index and our starting index for the loop
 		var s = this.layers.length - 1;
 
