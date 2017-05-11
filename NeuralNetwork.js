@@ -164,10 +164,43 @@ class NeuralNetwork {
 		// error distributed proportionaly through the network
 		this.distributeErrors();
 
+		// looping over layers starting from the last layer
+		for (var i = s; i > -1; --i) {
+			// each kth neuron is like a Rick, a Rick which has a morty connected to it
+			// in the other layer, which is jth layer, in other words i - 1 th layer
+			// in our case, each morty has a unique Rick and can have only one Rick
+			// but one Rick has many many Mortys in the layer before it
 
-		for (var i = 0; i < this.layers[s].length; ++i) {
+			// looping over the neurons in the jth layer
+			for (var j = 0; j < this.layers[i].length; ++j) {
 
-			
+
+				if (i - 1 > -1) {
+
+					// loops over the neurons in the kth layer, not to be confused with looping variable k
+					// in other words looping over the neurons in the layer before current layer
+					for (var k = 0; k < this.layers[i - 1].length; ++k) {
+														// error - neuron error   // ok - kth layer neuron output   // oj - jth layer neuron output
+						var deltaW = this.dEdW(this.layers[i - 1][k].error, this.layers[i][j].output, this.layers[i - 1][k].output);
+
+						// we got the weights that we need to change now
+
+						// the next step is to do stochastic gradient descent by taking part of this
+						// weight change value and adding it to the actual weight value
+
+						// again each weight has one neuron, so jth weight in a particular neuron in a particular layer 
+						// would be responsible for the jth neuron in the next layer
+						this.stochasticGD(this.layers[i - 1][k], j, deltaW);
+
+					}
+
+
+				}
+
+
+			}
+
+
 		}
 
 
@@ -287,9 +320,9 @@ class NeuralNetwork {
 	// Part - 4 - stochastically descents down the gradient by taking a step towards it//
 	////////////////////////////////////////////////////////////////////////////////////
 
-	stochasticGD() {
+	stochasticGD(neuron, index, deltaW) {
 
-
+		neuron.weights[index] += (deltaW * this.alpha);
 
 	}
 

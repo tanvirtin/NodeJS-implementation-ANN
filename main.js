@@ -9,10 +9,9 @@ function main() {
 
 	var nn = new NeuralNetwork([1, 2, 1], 0.01);
 
-	nn.feedForward([10]);
-	nn.backPropagation([1]);
 
-	nn.displayLayers();
+
+
 
 }
 
