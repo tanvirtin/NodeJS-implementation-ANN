@@ -10,9 +10,9 @@ class NeuralNetwork {
 	// two hidden layers with 2 neurons each and an output layer with 1 neuron
 	// the 0th index is the input layer and the length - 1 index is the output layer
 	// node the value inside each index of a list contains the number of neurons it posseses
-	constructor(architecture) {
+	constructor(architecture, learningRate) {
 		this.layers = []; // layers of neurons
-		this.alpha = 0.1; // learning rate of the Neural Network
+		this.alpha = learningRate; // learning rate of the Neural Network
 		this.generateLayers(architecture);
 	}
 
@@ -102,7 +102,7 @@ class NeuralNetwork {
 					}
 
 					var activated = this.sigmoid(val);
-
+					
 					this.layers[i][j].output = activated;
 
 				}
@@ -110,7 +110,7 @@ class NeuralNetwork {
 				// we are now inside the array containing neurons in a particular layer
 
 				// this.layer[i][j] // this is an individual neuron in a particular layer
-								// each neuron has 3 attributes, weights, deltaWeights and output
+									// each neuron has 3 attributes, weights, deltaWeights and output
 
 				// loop over the weight array in a single neuron
 				for (var k = 0; k < this.layers[i][j].weights.length; ++k) {		
@@ -124,9 +124,7 @@ class NeuralNetwork {
 						this.layers[i + 1][k].feedForwarded.push(this.layers[i][j].weights[k] * this.layers[i][j].output);
 
 					}
-
 				}
-
 				// neuron loop ends here
 			}
 		// layer loop ends here
@@ -136,111 +134,50 @@ class NeuralNetwork {
 
 	// this is where the real magic happens
 	backPropagation(target) {
-		// s is essentially the output layer's index
+		// s is essentially the output layer's index and our starting index for the loop
 		var s = this.layers.length - 1;
 
-		// the loop has to be backwards as now we are starting from the last element
-		// gives the array of neurons
-		// loop over each neuron in an array
+		// error check to see if target array provided matches the outer layer size
+		if (target.length !== this.layers[s].length) {
+			console.log("Target array size does not match the outputs");
+			return;
+		}
+
 		// extract the output and store it in an output array
 		
 		var o = [];
 
-		for (var i = 0; i < this.layers[this.layers.length - 1].length; ++i) {
-			o.push(this.layers[this.layers.length - 1][i].output);
+		for (var i = 0; i < this.layers[s].length; ++i) {
+			o.push(this.layers[s][i].output);
 		}
 
 		// now the error needs to be calculated for the output layer then back propagated
 
 		var err = this.error(target, o); // containts all the error values in an array
 
-		// loop over the neurons and assign the error
-		for (var i = 0; i < err.length; ++i) {
+		// distribute the error array to the output neurons by looping over it
+
+		for (var i = 0; i < this.layers[s].length ; ++i) {
 			this.layers[s][i].error = err[i];
 		}
 
-
-		// if the array is [1, 2, 3, 4], array starts off from [4, 3, 2, 1] 
-		for (var i = s; i > -1; --i) {
-			// this loop traverses each layer, and each layer contains array of neurons
-
-			// each neuron in the layer contributes error, therefor each weight contributes
-			// to the error, we need to sum up the total weight for that neuron and divide the ratio
-
-			// ratio of weight is basically the neuron we are currently at's weight divided by
-			// the first weight of each individual neurons in the network
-
-			// iterate for the number of neurons in the outer layer
-			// each iteration's index will be the index of the weight array of the neurons
-			// in the previous layer
-
-								// number of neurons
-			for (var j = 0; j < this.layers[i].length; ++j) {
-
-				// jth loop delagates the error to the previous layer
-
-				// this is to make sure i - 1 is never below 0, index out of bounds error! 
-				if (i - 1 > -1) {
-
-					var denominator = 0;
-
-					// loops over the neurons in the previous layer and sums up their jth weight
-					for (var k = 0; k < this.layers[i - 1].length; ++k) {
-						denominator += this.layers[i - 1][k].weights[j];
-					}
-
-					// now we have the denominator simply multiply the weight/denominator with error
-
-					for (var k = 0; k < this.layers[i - 1].length; ++k) {
-						var e = this.layers[i][j].error * (this.layers[i - 1][k].weights[j] / denominator);
-						this.layers[i - 1][k].error = e; // update the error to the prev layers neurons
-						var deltaW = this.dedw(e, this.layers[i - 1][k]);
-						this.layers[i - 1][k].deltaWeights.push(deltaW);
-					}
+		// error distributed proportionaly through the network
+		this.distributeErrors();
 
 
-				}
+		for (var i = 0; i < this.layers[s].length; ++i) {
 
-			}
-
-		}	
-
-		this.stochasticGD();
-
-	}
-
-	// the Neural Network is following the stochastic gradient descent algorithm
-	stochasticGD() {
-		for (var i = 0; i < this.layers.length; ++i) {
-			// we are dealing with layers in this loop
-			for (var j = 0; j < this.layers[i].length; ++j) {
-				// we are dealing with neurons in this loop 
-				for (var k = 0; k < this.layers[i][j].weights.length; ++k) {
-					this.layers[i][j].weights[k] += this.alpha * this.layers[i][j].deltaWeights[k]; 
-				}
-				this.layers[i][j].deltaWeights = [] // emptying out the delta weights for next iteration
-
-			}
-
+			
 		}
 
+
+
+
 	}
 
-	// neurons weights and value is important, so we take the neuron itself
-	dedw(error, neuron) {
-		return error * this.sigmoid(this.sumWO(neuron)) * (1 - this.sigmoid(this.sumWO(neuron))) * neuron.output
-	}
-
-	// sums up all the weight * output for an individual neuron
-	// sigma of Wj * Oj jth layer neuron
-	sumWO(neuron) {
-		var val = 0;
-		for (var i = 0; i < neuron.weights.length; ++i) {
-			val += neuron.weights[i] * neuron.output;
-		}
-		return val;
-	}
-
+	////////////////////////////////////////////////////
+	// Part - 1 - calculate the error from the output //
+	///////////////////////////////////////////////////
 
 	// error function for the Neural Network
 
@@ -262,6 +199,100 @@ class NeuralNetwork {
 		}
 		return err;
 	}
+
+	/////////////////////////////////////////////////////////////////////////////
+	// Part - 2 - distribute the error proportionaly through the Neural Network//
+	////////////////////////////////////////////////////////////////////////////
+
+	distributeErrors() {
+		var s = this.layers.length - 1;
+
+		// start from the output layer
+		for (var i = s; i > -1; --i) {
+
+			// go through each neuron in the layer
+			for (var j = 0; j < this.layers[i].length; ++j) {
+
+				var ratioDenominator = 0;
+
+				// ratioDenominator allocates the the weight denominator 
+				// to find out the ratio of weight distribution 
+	
+				// makes sure we don't go below 0th index, we must stop at the 0th index
+				if (i - 1 > -1) {
+
+					for (var k = 0; k < this.layers[i - 1].length; ++k) {
+
+						// since number of neurons in the next layer is equal to the
+						// weights in the previous layer we can access weight index
+						ratioDenominator += this.layers[i - 1][k].weights[j];
+
+					} // iteration of the neurons in the previous layer ends here
+
+					// first loop gathered the denominator
+					// the next loop will apply the error using the ratio
+					for (var k = 0; k < this.layers[i - 1].length; ++k) {
+
+						// loops over each neuron and adds to existing error, same principle followed as the loop above it regarding the kth index
+						this.layers[i - 1][k].error += ((this.layers[i - 1][k].weights[j] * this.layers[i][j].error) / ratioDenominator);
+
+					}
+				
+				}
+
+			} // looping over neurons in each layer ends here
+
+		} // looping over the layer ends here
+
+	}
+
+	///////////////////////////////////////////////////////////////////////////
+	// Part - 3 - calculate the gradient through which we do gradient descent//
+	///////////////////////////////////////////////////////////////////////////
+
+	// Note** - dEdW = dEdO * dOdW
+	// dEdW is the error with respect to the weight which is basically just 2 * (t - E)
+	// d0dW is the one giant expression that we deal below later
+
+	// dEdW is the rate of change of the error with respect to the weights, this is what
+	// we substract away in the gradient descent
+
+	// Part - 3 - a
+
+	// ok is the output value of the current layer k
+	// oj is the output value of the previous layer neuron which contributed to ok
+	// don't get confused its just its own personal output value
+	dEdW(err, ok, oj) {
+		return this.dEdO(err) * this.dOdW(ok, oj);
+	}
+
+	// Part - 3 - b
+
+	// differentiation of the error in terms of the output --> -(tk - ok)
+	// tk is the target value for the kth layer and ok is the output value for the kth layer
+
+	dEdO(err) {
+		return -(err)
+	}
+
+	// differentiation of the ouput with respect to the weights of the neuron
+	
+	// Part - 3 - c
+
+	dOdW(ok, oj) {
+		return ok * (1 - ok) * oj
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////
+	// Part - 4 - stochastically descents down the gradient by taking a step towards it//
+	////////////////////////////////////////////////////////////////////////////////////
+
+	stochasticGD() {
+
+
+
+	}
+
 
 	// activation function - sigmoid
 

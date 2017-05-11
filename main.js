@@ -7,9 +7,12 @@ function main() {
 
 	var data = trainingData();
 
-	var nn = new NeuralNetwork([1, 2, 2, 1]);
+	var nn = new NeuralNetwork([1, 2, 1], 0.01);
 
-	
+	nn.feedForward([10]);
+	nn.backPropagation([1]);
+
+	nn.displayLayers();
 
 }
 
