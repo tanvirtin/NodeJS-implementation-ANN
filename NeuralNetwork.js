@@ -81,79 +81,33 @@ class NeuralNetwork {
 	getErrors() {
 		var err = []
 
-		for (var i = 0; i < this.layers[this.layer.length - 1].length; ++i) {
+		for (var i = 0; i < this.layers[this.layesr.length - 1].length; ++i) {
 			err.push(this.layers[this.layers.length - 1][i].error);
 		}
 
-		return err;
-	}
 
+	}
 
 
 	// feeds forward the inputs through the layer
 	// must take a list of inputs which equals the first layer
 	feedForward(inputList) {
-		// one of the expression must be true in order for the entire expression to be
-		// evaluated to true, either the inputList variable is not an array or
-		// the inputLayer list does not have the same size/number of elements as the
-		// as the array provided through the parameter of the function
-		if (inputList.constructor !== Array || inputList.length != this.layers[0].length) {
-			console.log("Input layer architecture error!");
-			return;
-		}
+		
 
-		// inputList contains a value or a bunch of values in each index of the list
-		// these value(s) are the values of the first layer neurons, which are our input neurons
-		for (var i = 0; i < inputList.length; ++i) {
-			this.layers[0][i].output = inputList[i];
-		}
 
-		// the value from the input layer needs to be feed forwarded to the rest of the layers
 
-		for (var i = 0; i < this.layers.length; ++i) {
 
-			// goes through each layer and does the magic
 
-			for (var j = 0; j < this.layers[i].length; ++j) {
-				// add the feedForwarded values in each neuron and squash it and store it as your output
-				// checks if we are in the input layer or not, if we are then skip this thing
-				if (i !== 0) {
-					var val = 0;
 
-					// looping over feedForwarded array
-					for (var x = 0; x < this.layers[i][j].feedForwarded.length; ++x) {
-						val += this.layers[i][j].feedForwarded[x];
-						this.layers[i][j].feedForwarded = []; // empty out the array in preparation for the next iteration
-					}
 
-					var activated = this.sigmoid(val);
-					
-					this.layers[i][j].output = activated;
 
-				}
 
-				// we are now inside the array containing neurons in a particular layer
 
-				// this.layer[i][j] // this is an individual neuron in a particular layer
-									// each neuron has 3 attributes, weights, deltaWeights and output
 
-				// loop over the weight array in a single neuron
-				for (var k = 0; k < this.layers[i][j].weights.length; ++k) {		
-	
-					if (i + 1 !== this.layers.length) {	
-						// each weight is dedicated to each neuron in the other layer
-						// so the weight * output is simply multiplied together and passed onto a neuron
-						
-						// number of neurons in the next layer is the same as number of weights in the current layer
-						// therefore variable k can be used to iterate both weights in this layer and neurons in the other layer
-						this.layers[i + 1][k].feedForwarded.push(this.layers[i][j].weights[k] * this.layers[i][j].output);
 
-					}
-				}
-				// neuron loop ends here
-			}
-		// layer loop ends here
-		}
+
+
+
 	}
 
 
@@ -227,9 +181,6 @@ class NeuralNetwork {
 
 
 		}
-
-
-
 
 	}
 

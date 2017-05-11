@@ -5,15 +5,13 @@ var NeuralNetwork = require("./NeuralNetwork.js");
 
 function main() {
 
-	var nn = new NeuralNetwork([2, 2, 1], 0.2);
+	var nn = new NeuralNetwork([3, 2, 1], 0.2);
 
-	var epochs = 10000;
+	var epochs = 10;
 
-	var x = [[0, 0], [0, 1], [1, 0], [1, 1]];
-    
-    var y = [[0], [1], [1], [0]];
+	var x = [[0,0,1], [0,1,1], [1,0,1], [1,1,1]];
 
-
+	var y = [[0], [1], [1], [0]];
 
 	for (var i = 0; i < epochs; ++i) {
 	
@@ -27,7 +25,7 @@ function main() {
 
 	var result = []
 	for (var i = 0; i < x.length; ++i) {
-		nn.feedForward[i];
+		nn.feedForward[x[i]];
 		result.push(nn.getOutput());
 	}
 
