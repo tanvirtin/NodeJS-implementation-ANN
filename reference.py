@@ -62,45 +62,58 @@ class NeuralNetwork(object):
 
 
 def main():
-    nn = NeuralNetwork(3, 2, 1, 0.2)
+    nn = NeuralNetwork(1, 2, 1, 0.1)
 
-    #input data
-    x = numpy.array([[0,0,1],  # Note: there is a typo on this line in the video
-                [0,1,1],
-                [1,0,1],
-                [1,1,1]])
-
-
-    # The output of the exclusive OR function follows. 
-
-    # In[26]:
-
-    #output data
-    y = numpy.array([[0],
-                 [1],
-                 [1],
-                 [0]])
+    # #input data
+    # x = numpy.array([[0,0,1],  # Note: there is a typo on this line in the video
+    #             [0,1,1],
+    #             [1,0,1],
+    #             [1,1,1]])
 
 
+    # # The output of the exclusive OR function follows. 
 
-    for i in range(60000):
-        rand = randint(0, 3)
-        nn.train(x[rand], y[rand])
+    # # In[26]:
+
+    # #output data
+    # y = numpy.array([[0],
+    #              [1],
+    #              [1],
+    #              [0]])
 
 
 
-    outOne = nn.query([0,0,1])
-    print(outOne)
+    # for i in range(60000):
+    #     rand = randint(0, 3)
+    #     nn.train(x[rand], y[rand])
 
-    outOne = nn.query([0,1,1])
-    print(outOne)
 
-    outOne = nn.query([1,0,1])
-    print(outOne)
 
-    outOne = nn.query([1,1,1])
-    print(outOne)
+    # outOne = nn.query([0,0,1])
+    # print(outOne)
 
+    # outOne = nn.query([0,1,1])
+    # print(outOne)
+
+    # outOne = nn.query([1,0,1])
+    # print(outOne)
+
+    # outOne = nn.query([1,1,1])
+    # print(outOne)
+
+
+
+    for i in range(8000):
+        nn.train([9], [0])
+        nn.train([3], [1])
+
+    answerOne = nn.query([9])
+
+    print(answerOne)
+
+    answerTwo = nn.query([3])
+
+    print(answerTwo)
 
 
 

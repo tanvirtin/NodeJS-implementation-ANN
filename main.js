@@ -5,37 +5,35 @@ var NeuralNetwork = require("./NeuralNetwork.js");
 
 function main() {
 
-	//var nn = new NeuralNetwork([3, 2, 2, 1], 0.2);
+	var nn = new NeuralNetwork([1, 10, 1], 0.5);
 
-	// var epochs = 60000;
+	var epochs = 800000
 
-	// var x = [[0,0,1], [0,1,1], [1,0,1], [1,1,1]];
+	for (var i = 0; i < epochs; ++i) {
+		nn.train([9], [0]);
+		nn.train([9], [0]);		
+		nn.train([3], [1]);
+		nn.train([3], [1]);		
+		nn.train([4], [0]);
+		nn.train([4], [0]);		
+	}
 
-	// var y = [[0], [1], [1], [0]];
-
-	// for (var i = 0; i < epochs; ++i) {
-	// 	// when math.floor is done you can never actually hit 4, even 3.99 will be rounded off to 3	
-	// 	var randIndex = Math.floor(Math.random() * 4);
-
-	// 	nn.train(x[randIndex], y[randIndex]);
-
-	// }
-
-	// var result = []
-	// for (var i = 0; i < x.length; ++i) {
-	// 	nn.feedForward[x[i]];
-	// 	result.push(nn.getOutput());
-	// }
-
-	// console.log(result);
-
-	var nn = new NeuralNetwork([1, 2, 1], 0.2);
+	nn.feedForward([9]);
+	console.log("For 9");
+	nn.displayOutput();
 
 
 	nn.feedForward([3]);
-	nn.backPropagate([1]);
+	console.log("For 3");
+	nn.displayOutput();
 
-	nn.displayLayers();
+	nn.feedForward([4]);
+	console.log("For 4");
+	nn.displayOutput();
+
+	nn.feedForward([7]);
+	console.log("For 4");
+	nn.displayOutput();
 
 
 }

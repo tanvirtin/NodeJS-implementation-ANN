@@ -12,7 +12,7 @@ class Neuron {
 	constructor(numNeuronsNL, randomNum) {
 		this.weights = []; // array of weights
 		this.output = 0; // this is the activated output value that a neuron holds		
-		this.error = 0; // each neuron should have it's own error that it should rectify
+		this.delta = 0; // contains the delta error value
 		this.assignWeights(numNeuronsNL, randomNum);
 	}
 

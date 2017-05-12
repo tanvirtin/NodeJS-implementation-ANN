@@ -113,59 +113,73 @@ class NeuralNetwork {
 
 		var err = this.error(target, o); // containts all the error values in an array
 
-
-
 		// loops over the last layer which is the output layer and assigns error values to neurons
 		for (var i = 0; i < this.layers[s].length; ++i) {
-			this.layers[s][i].error = err[i];
+			this.layers[s][i].delta = err[i] * this.sigmoidPrime(this.layers[s][i].output);
 		}
 
+		// back propagation done using the delta rule to calculate dE/dW (differentiation of error with respect to the weight)
+
+		// loop starts from the layer before the output layer till before the hidden layers end, which the next layer after the input layer
+		for (var i = s - 1; i > 0; --i) {
+
+			for (var j = 0; j < this.layers[i].length; ++j) {
+
+				if (i + 1 !== this.layers.length) {
+				
+					for (var k = 0; k < this.layers[i + 1].length; ++k) {
+						// sums up the delta values of the current layer's neuron using the next layer's 
+						// delta * weight at the kth index for the neuron with the jth index for the kth indexed neuron
+						// each neuron in the current layer has exactly the same number of weights attached to it as the number of
+						// neurons in the next layer
+						this.layers[i][j].delta += this.layers[i + 1][k].delta * this.layers[i + 1][k].weights[j];
 
 
-		// two checks needs to be done
+					} // looping over the neurons in the next layer ends here
 
-		// first check is if we are at the output layer, which follows different laws
-		// when updating the weights
-
-		// second check is for all the hidden layers, which follows the same updating the
-		// weights law througout the neurons
+				}
 
 
-		for (var i = s; i > - 1; ++i) {
+			} // looping over the neurons in the current layer ends here
 
-			if () {
+			// loops over the neurons in the layer and multiplies the derivative of the activation function and the deltas
+			for (var j = 0; j < this.layers[i].length - 1; ++j) {
+			
+				this.layers[i][j].delta = this.layers[i][j].delta * this.sigmoidPrime(this.layers[i][j].output);
 
-
-
-
-
-			} else {
-
-
-
-
-			}
-
-		}
-
-
-
-
-
-
+			} // looping over the neurons in a layer ends here
 
 
 
+		} // looping over the hidden layers in a Neural Network ends here
 
 
-
-
+		// using the deltas we now perform stochastic gradient descent
+		this.stochasticGD();
 
 	}
 
-	////////////////////////////////////////////////////
-	// Part - 1 - calculate the error from the output //
-	///////////////////////////////////////////////////
+
+	stochasticGD() {
+
+		for (var i = 1; i < this.layers.length; ++i) {
+
+			for (var j = 0; j < this.layers[i].length; ++j) {
+
+				// error checking to not go below input layer
+				//if (i - 1 > -1) {
+					for (var k = 0; k < this.layers[i][j].weights.length; ++k) {
+						this.layers[i][j].weights[k] += this.alpha * this.layers[i][j].delta * this.layers[i - 1][k].output;
+					} // looping over the weights in an individual neuron ends here
+
+				//}
+
+			} // looping over neurons in a layer ends here
+
+		} // looping over each layer in a Neural Network ends here
+
+	}
+
 
 	// both arguments are in array form
 	error(target, output) {
@@ -181,61 +195,6 @@ class NeuralNetwork {
 		}
 		return err;
 	}
-
-	/////////////////////////////////////////////////////////////////////////////////
-	// Part - 2 distribute the error proportionaly through the Neural Network//
-	////////////////////////////////////////////////////////////////////////////////
-
-	// Part - 2 - a - distribute the error
-
-	distributeErrors() {
-		var s = this.layers.length - 1;
-
-		// start from the output layer
-		for (var i = s; i > -1; --i) {
-
-			// go through each neuron in the layer
-			for (var j = 0; j < this.layers[i].length; ++j) {
-	
-				// makes sure we don't go below 0th index, we must stop at the 0th index
-				if (i - 1 > -1) {
-
-					// first loop gathered the denominator
-					// the next loop will apply the error using the ratio
-					for (var k = 0; k < this.layers[i - 1].length; ++k) {
-
-						// loops over each neuron and adds to existing error, same principle followed as the loop above it regarding the kth index
-						this.layers[i - 1][k].error += (this.layers[i - 1][k].weights[j] * this.layers[i][j].error);
-	
-
-
-
-
-
-					} // looping over neurons in the i - 1 layer ends here
-				
-				}
-
-			} // looping over neurons in each layer ends here
-
-		} // looping over the layer ends here
-
-	}
-
-	// Part - 2 - b - clear the error that was added
-
-	clearErrors() {
-		for (var i = 0; i < this.layers.length - 1; ++i) {
-			
-			for (var j = 0; j < this.layers[i].length; ++j) {
-			
-				this.layers[i][j].error = 0; // clears the error out
-			
-			} // looping over each neurons end here
-
-		} // looping over the layers end here
-	}
-
 
 	// activation function - sigmoid
 	sigmoid(x) {
@@ -269,7 +228,9 @@ class NeuralNetwork {
 
 	// displays the output layer
 	displayOutput() {
-		console.log(this.layers[this.layers.length - 1]);
+		for (var i = 0; i < this.layers[this.layers.length - 1].length; ++i) {
+			console.log("Output value " + (i + 1) + " --> " + this.layers[this.layers.length - 1][i].output.toFixed(2).toString());
+		}
 	}
 
 	getOutput() {
