@@ -166,14 +166,13 @@ class NeuralNetwork {
 
 			for (var j = 0; j < this.layers[i].length; ++j) {
 
-				// error checking to not go below input layer
-				//if (i - 1 > -1) {
-					for (var k = 0; k < this.layers[i][j].weights.length; ++k) {
-						this.layers[i][j].weights[k] += this.alpha * this.layers[i][j].delta * this.layers[i - 1][k].output;
-					} // looping over the weights in an individual neuron ends here
+				for (var k = 0; k < this.layers[i][j].weights.length; ++k) {
+				
+					this.layers[i][j].weights[k] += this.alpha * this.layers[i][j].delta * this.layers[i - 1][k].output;
+				
+				} // looping over the weights in an individual neuron ends here
 
-				//}
-
+			
 			} // looping over neurons in a layer ends here
 
 		} // looping over each layer in a Neural Network ends here

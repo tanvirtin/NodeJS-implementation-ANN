@@ -31,10 +31,6 @@ function main() {
 	console.log("For 4");
 	nn.displayOutput();
 
-	nn.feedForward([7]);
-	console.log("For 4");
-	nn.displayOutput();
-
 
 }
 
