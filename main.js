@@ -14,35 +14,17 @@ function main() {
 		nn.train([9], [0]);		
 		nn.train([3], [1]);
 		nn.train([3], [1]);		
-		nn.train([4], [0]);
-		nn.train([4], [0]);		
+		nn.train([4], [1]);
+		nn.train([4], [1]);		
 	}
 
-	nn.feedForward([9]);
-	console.log("For 9");
-	nn.displayOutput();
+	console.log(nn.query([9]));
 
+	console.log(nn.query([3]));
 
-	nn.feedForward([3]);
-	console.log("For 3");
-	nn.displayOutput();
-
-	nn.feedForward([4]);
-	console.log("For 4");
-	nn.displayOutput();
-
+	console.log(nn.query([4]));
 
 }
-
-/*
-	The expression below is equal to saying
-
-	if __name__ == "__main__":
-		main()
-
-	in Python
-
-*/
 
 if (!module.parent) {
 	main();
