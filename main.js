@@ -5,7 +5,7 @@ var NeuralNetwork = require("./NeuralNetwork.js");
 
 function main() {
 
-	var nn = new NeuralNetwork([1, 10, 1], 0.5);
+	var nn = new NeuralNetwork([1, 4, 4, 1], 0.5);
 
 	var epochs = 800000
 
