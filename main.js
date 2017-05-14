@@ -10,6 +10,9 @@ function main() {
 	var epochs = 800000
 
 	for (var i = 0; i < epochs; ++i) {
+		if (i % 10000 === 0) {
+			console.log("On " + i + "th epoch...");
+		}
 		nn.train([9], [0]);
 		nn.train([9], [0]);		
 		nn.train([3], [1]);
