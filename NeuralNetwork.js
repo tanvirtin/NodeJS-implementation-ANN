@@ -68,8 +68,10 @@ class NeuralNetwork {
 				// and bias weights always gets multiplied by 1
 				this.layers[i][j].output += this.layers[i][j].weights[this.layers[i][j].weights.length - 1] * 1
 
-				// individual neuron being activated upon exceeding the threshold value
-				this.layers[i][j].output = this.sigmoid(this.layers[i][j].output);
+				if (i !== this.layers.length - 1) {
+					// individual neuron being activated upon exceeding the threshold value
+					this.layers[i][j].output = this.sigmoid(this.layers[i][j].output);
+				}
 		
 			} // looping over each neurons in a layer ends here
 

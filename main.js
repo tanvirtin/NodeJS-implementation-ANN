@@ -16,7 +16,7 @@ function main() {
 		nn.train([9], [0]);
 		nn.train([9], [0]);		
 		nn.train([3], [1]);
-		nn.train([3], [1]);		
+		nn.train([3], [1]);	
 		nn.train([4], [1]);
 		nn.train([4], [1]);		
 	}
