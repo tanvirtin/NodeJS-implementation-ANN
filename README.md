@@ -1,2 +1,3 @@
-# NodeJS implementation of an ANN
+# Artificial Neural Network in NodeJS
 
+Artificial Neural Network implemented in NodeJS
